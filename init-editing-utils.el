@@ -97,9 +97,12 @@
 (global-set-key (kbd "C-c p") 'duplicate-line)
 
 ;; Train myself to use M-f and M-b instead
-(global-unset-key [M-left])
-(global-unset-key [M-right])
-
+;; (global-unset-key [M-left])
+;; (global-unset-key [M-right])
+(global-set-key [C-left] 'windmove-left)          ; move to left windnow
+(global-set-key [C-right] 'windmove-right)        ; move to right window
+(global-set-key [C-up] 'windmove-up)              ; move to upper window
+(global-set-key [C-down] 'windmove-down)          ; move to downer window
 
 ;;----------------------------------------------------------------------------
 ;; Shift lines up and down

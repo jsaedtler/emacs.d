@@ -56,6 +56,7 @@
 (require 'init-growl)
 
 (require 'init-editing-utils)
+(require 'smooth-scrolling)
 
 (require 'init-svn)
 (require 'init-darcs)

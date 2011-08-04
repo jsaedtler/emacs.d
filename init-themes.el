@@ -13,6 +13,7 @@
 (autoload 'color-theme-sanityinc-dark "color-theme-sanityinc" "A dark color theme" t)
 (autoload 'color-theme-sanityinc-solarized-light "color-theme-sanityinc-solarized" "A light color theme" t)
 (autoload 'color-theme-sanityinc-solarized-dark "color-theme-sanityinc-solarized" "A dark color theme" t)
+(autoload 'color-theme-railscasts "color-theme-railscasts" "A railscasts color theme" t)
 
 
 (defun color-theme-terminal ()

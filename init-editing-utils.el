@@ -17,7 +17,7 @@
  line-spacing 0.2
  make-backup-files nil
  mouse-yank-at-point t
- show-trailing-whitespace t
+ show-trailing-whitespace nil
  tooltip-delay 1.5
  truncate-lines nil
  truncate-partial-width-windows nil

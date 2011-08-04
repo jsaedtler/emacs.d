@@ -89,8 +89,8 @@
      (global-set-key (kbd "M-]") 'paredit-close-square-and-newline)
      (global-set-key (kbd "M-}") 'paredit-close-curly-and-newline)
 
-     (global-set-key (kbd "C-<right>") 'paredit-forward-slurp-sexp)
-     (global-set-key (kbd "C-<left>") 'paredit-forward-barf-sexp)
+;;     (global-set-key (kbd "C-<right>") 'paredit-forward-slurp-sexp)
+;;     (global-set-key (kbd "C-<left>") 'paredit-forward-barf-sexp)
      (global-set-key (kbd "C-M-<left>") 'paredit-backward-slurp-sexp)
      (global-set-key (kbd "C-M-<right>") 'paredit-backward-barf-sexp)
 

@@ -92,7 +92,7 @@
   (require 'init-spelling))
 
 ;; In-Emacs apps
-(require 'init-twitter)
+;;(require 'init-twitter)
 
 (require 'init-misc)
 

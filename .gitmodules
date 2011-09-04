@@ -123,7 +123,7 @@
 	url = https://github.com/emacsmirror/lively.git
 [submodule "site-lisp/whole-line-or-region"]
 	path = site-lisp/whole-line-or-region
-	url = https://github.com/emacsmirror/whole-line-or-region.git
+	url = https://github.com/purcell/whole-line-or-region.git
 [submodule "site-lisp/pointback"]
 	path = site-lisp/pointback
 	url = https://github.com/emacsmirror/pointback.git
@@ -196,3 +196,6 @@
 [submodule "site-lisp/pretty-mode"]
 	path = site-lisp/pretty-mode
 	url = https://github.com/emacsmirror/pretty-mode.git
+[submodule "site-lisp/less-css-mode"]
+	path = site-lisp/less-css-mode
+	url = https://github.com/purcell/less-css-mode.git

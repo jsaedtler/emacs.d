@@ -73,6 +73,8 @@ source file under ~/.emacs.d/site-lisp/name/"
   (shell-command "cd ~/.emacs.d && grep -e '^site-lisp/' .gitignore|xargs rm -rf"))
 
 (defun ensure-site-lisp-libs ()
+  (unless (> emacs-major-version 23)
+    (ensure-lib-from-url 'package "http://repo.or.cz/w/emacs.git/blob_plain/1a0a666f941c99882093d7bd08ced15033bc3f0c:/lisp/emacs-lisp/package.el"))
   (ensure-lib-from-url 'moz "https://github.com/bard/mozrepl/raw/master/chrome/content/moz.el")
   (ensure-lib-from-url 'todochiku "http://www.emacswiki.org/emacs/download/todochiku.el")
   ;; TODO: consider smooth-scroll instead

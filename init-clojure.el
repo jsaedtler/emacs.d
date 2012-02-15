@@ -1,30 +1,30 @@
-;; Autoloads and basic wiring
-(autoload 'clojure-mode "clojure-mode" "Major mode for editing Clojure code." t nil)
-(autoload 'clojure-test-mode "clojure-test-mode" "A minor mode for running Clojure tests." t nil)
+;; Basic wiring
 (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
 
-(eval-after-load "clojure-mode"
+(eval-after-load 'clojure-mode
   '(progn
      (require 'clojure-test-mode)))
 
 ;; Use technomancy's bag of fancy clojure/slime tricks
-(eval-after-load "slime"
+(eval-after-load 'slime
   '(progn
      (require 'durendal)
-     (durendal-enable t)))
+     (durendal-enable t)
+     (durendal-disable-slime-repl-font-lock)))
 
-(add-hook 'clojure-mode-hook 'enable-paredit-mode)
+(add-hook 'clojure-mode-hook 'smp-lisp-setup)
 
 
 (defun slime-clojure-repl-setup ()
-  "Some REPL setup additional to that in durendal"
+  "Some REPL setup additional to that in durendal."
   (when (string-equal (slime-lisp-implementation-name) "clojure")
     (when (slime-inferior-process)
       (message "Setting up repl for clojure")
       (slime-redirect-inferior-output))
 
     (set-syntax-table clojure-mode-syntax-table)
-    (setq lisp-indent-function 'clojure-indent-function)))
+    (setq lisp-indent-function 'clojure-indent-function)
+    (clojure-mode-font-lock-setup)))
 
 (add-hook 'slime-repl-mode-hook 'slime-clojure-repl-setup)
 
@@ -41,27 +41,22 @@
 (defclojureface clojure-double-quote "#b8bb00"   "Clojure special" (:background "unspecified"))
 
 (defun tweak-clojure-syntax ()
-  (mapcar (lambda (x) (font-lock-add-keywords nil x))
-          '((("#?['`]*(\\|)"       . 'clojure-parens))
-            (("#?\\^?{\\|}"        . 'clojure-brackets))
-            (("\\[\\|\\]"          . 'clojure-braces))
-            ((":\\w+#?"            . 'clojure-keyword))
-            (("#?\""               0 'clojure-double-quote prepend))
-            (("nil\\|true\\|false\\|%[1-9]?" . 'clojure-special))
-            (("(\\(\\.[^ \n)]*\\|[^ \n)]+\\.\\|new\\)\\([ )\n]\\|$\\)" 1 'clojure-java-call))
-            )))
+  (dolist (x '((("#?['`]*(\\|)"       . 'clojure-parens))
+               (("#?\\^?{\\|}"        . 'clojure-brackets))
+               (("\\[\\|\\]"          . 'clojure-braces))
+               ((":\\w+#?"            . 'clojure-keyword))
+               (("#?\""               0 'clojure-double-quote prepend))
+               (("nil\\|true\\|false\\|%[1-9]?" . 'clojure-special))
+               (("(\\(\\.[^ \n)]*\\|[^ \n)]+\\.\\|new\\)\\([ )\n]\\|$\\)" 1 'clojure-java-call))
+               ))
+    (font-lock-add-keywords nil x)))
 
 (add-hook 'clojure-mode-hook 'tweak-clojure-syntax)
 
 
 
-(require 'elein)
 
-
-(eval-after-load "viper"
-  '(add-to-list 'viper-vi-state-mode-list 'clojure-mode))
-
-(eval-after-load "gist"
+(eval-after-load 'gist
   '(add-to-list 'gist-supported-modes-alist '(clojure-mode . ".clj")))
 
 (provide 'init-clojure)

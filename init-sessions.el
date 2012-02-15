@@ -4,23 +4,13 @@
 (setq desktop-save 'if-exists)
 (desktop-save-mode 1)
 (defadvice desktop-read (around trace-desktop-errors)
-  (let ((old-debug-on-error debug-on-error))
-    (setq debug-on-error t)
-    ad-do-it
-    (setq debug-on-error old-debug-on-error)))
-
-(autoload 'save-current-configuration "revive" "Save status" t)
-(autoload 'resume "revive" "Resume Emacs" t)
-(autoload 'wipe "revive" "Wipe Emacs" t)
-(define-key ctl-x-map "S" 'save-current-configuration)
-(define-key ctl-x-map "F" 'resume)
-(define-key ctl-x-map "K" 'wipe)
+  (let ((debug-on-error t))
+    ad-do-it))
 
 
 ;;----------------------------------------------------------------------------
 ;; Restore histories and registers after saving
 ;;----------------------------------------------------------------------------
-(require 'session)
 (setq session-save-file (expand-file-name "~/.emacs.d/.session"))
 (add-hook 'after-init-hook 'session-initialize)
 
@@ -40,7 +30,9 @@
                 (regexp-history           . 60)
                 (regexp-search-ring       . 20)
                 (search-ring              . 20)
+                (comint-input-ring        . 50)
                 (shell-command-history    . 50)
+                desktop-missing-file-warning
                 tags-file-name
                 register-alist)))
 

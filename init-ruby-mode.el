@@ -1,10 +1,8 @@
 ;; Currently loading ruby-mode and inf-ruby from the version bundled with rinari
-(autoload 'ruby-mode "ruby-mode" "Mode for editing ruby source files" t)
 (setq interpreter-mode-alist
       (cons '("ruby" . ruby-mode) interpreter-mode-alist))
 
-(add-auto-mode 'ruby-mode "\\.rb$" "Rakefile$" "\.rake$" "\.rxml$" "\.rjs$" ".irbrc$" "\.builder$" "\.ru$" "Gemfile$" "\.tokamak")
-
+(add-auto-mode 'ruby-mode "\\.rb$" "Rakefile$" "\.rake$" "\.rxml$" "\.rjs$" ".irbrc$" "\.builder$" "\.ru$" "\.gemspec$" "Gemfile$" "\.tokamak")
 
 (autoload 'run-ruby "inf-ruby" "Run an inferior Ruby process")
 (autoload 'inf-ruby-keys "inf-ruby"
@@ -14,36 +12,29 @@
 
 (setq ruby-use-encoding-map nil)
 
-(eval-after-load "ruby-mode"
-  '(progn
-     (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)))
+(eval-after-load 'ruby-mode
+  '(define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent))
 
 
 ;;----------------------------------------------------------------------------
 ;; Ruby - flymake
 ;;----------------------------------------------------------------------------
-(require 'flymake-ruby)
 (add-hook 'ruby-mode-hook 'flymake-ruby-load)
 
 
 ;;----------------------------------------------------------------------------
 ;; Ruby - misc
 ;;----------------------------------------------------------------------------
-;; For some unknown reason, viper starts off in insert mode inside ruby-mode buffers
-(eval-after-load "viper"
-  '(add-to-list 'viper-vi-state-mode-list 'ruby-mode))
-
 (setq compile-command "rake ")
 
-(autoload 'ri "ri-ruby" "Show ri documentation for Ruby symbols" t)
-(setq ri-ruby-script (concat (directory-of-library "ri-ruby") "ri-emacs.rb"))
+(defalias 'ri 'yari)
 
 
 ;;----------------------------------------------------------------------------
 ;; Ruby - erb
 ;;----------------------------------------------------------------------------
 (add-auto-mode 'html-mode "\.rhtml$" "\.html\.erb$")
-(eval-after-load "mmm-vars"
+(eval-after-load 'mmm-vars
   '(progn
      (mmm-add-classes
       '((eruby :submode ruby-mode :front "<%[#=]?" :back "-?%>"
@@ -63,7 +54,7 @@
 ;;----------------------------------------------------------------------------
 ;; Ruby - my convention for heredocs containing SQL
 ;;----------------------------------------------------------------------------
-(eval-after-load "mmm-mode"
+(eval-after-load 'mmm-mode
   '(progn
      (mmm-add-classes
       '((ruby-heredoc-sql :submode sql-mode :front "<<-?end_sql.*\r?\n" :back "[ \t]*end_sql" :face mmm-code-submode-face)))
@@ -82,7 +73,12 @@
 (add-hook 'ruby-mode-hook (lambda () (local-set-key [f6] 'recompile)))
 
 
+
+;;----------------------------------------------------------------------------
+;; Yaml
+;;----------------------------------------------------------------------------
 (autoload 'yaml-mode "yaml-mode" "Major mode for YAML source")
-(add-auto-mode 'yaml-mode "\\.yml$")
+(add-auto-mode 'yaml-mode "\\.ya?ml$")
+
 
 (provide 'init-ruby-mode)

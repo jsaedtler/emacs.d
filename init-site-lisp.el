@@ -1,6 +1,7 @@
 ;;----------------------------------------------------------------------------
 ;; Set load path
 ;;----------------------------------------------------------------------------
+(eval-when-compile (require 'cl))
 (if (fboundp 'normal-top-level-add-to-load-path)
     (let* ((my-lisp-dir "~/.emacs.d/site-lisp/")
            (default-directory my-lisp-dir))
@@ -11,6 +12,13 @@
                      unless (string-match "^\\." dir)
                      collecting (expand-file-name dir))
                load-path)))))
+
+
+;;----------------------------------------------------------------------------
+;; Ensure we're freshly byte-compiled
+;;----------------------------------------------------------------------------
+(require 'bytecomp)
+(byte-recompile-directory "~/.emacs.d/site-lisp" 0)
 
 
 ;;----------------------------------------------------------------------------
@@ -28,11 +36,13 @@
     (unless (file-directory-p dir)
       (make-directory dir)
       (add-to-list 'load-path dir))
-    (url-copy-file url (site-lisp-library-el-path name) t nil)))
+    (let ((el-file (site-lisp-library-el-path name)))
+      (url-copy-file url el-file t nil)
+      el-file)))
 
 (defun ensure-lib-from-url (name url)
   (unless (site-lisp-library-loadable-p name)
-    (download-site-lisp-module name url)))
+    (byte-compile-file (download-site-lisp-module name url))))
 
 (defun site-lisp-library-loadable-p (name)
   "Return whether or not the library `name' can be loaded from a
@@ -74,18 +84,7 @@ source file under ~/.emacs.d/site-lisp/name/"
 
 (defun ensure-site-lisp-libs ()
   (unless (> emacs-major-version 23)
-    (ensure-lib-from-url 'package "http://repo.or.cz/w/emacs.git/blob_plain/1a0a666f941c99882093d7bd08ced15033bc3f0c:/lisp/emacs-lisp/package.el"))
-  (ensure-lib-from-url 'moz "https://github.com/bard/mozrepl/raw/master/chrome/content/moz.el")
-  (ensure-lib-from-url 'todochiku "http://www.emacswiki.org/emacs/download/todochiku.el")
-  ;; TODO: consider smooth-scroll instead
-  (ensure-lib-from-url 'smooth-scrolling "http://adamspiers.org/computing/elisp/smooth-scrolling.el")
-  (ensure-lib-from-url 'edit-server "http://github.com/stsquad/emacs_chrome/raw/master/servers/edit-server.el")
-  (ensure-lib-from-url 'eol-conversion "http://centaur.maths.qmw.ac.uk/emacs/files/eol-conversion.el")
-  (ensure-lib-from-url 'dsvn "http://svn.apache.org/repos/asf/subversion/trunk/contrib/client-side/emacs/dsvn.el")
-  (ensure-lib-from-url 'vc-darcs "http://www.pps.jussieu.fr/~jch/software/repos/vc-darcs/vc-darcs.el")
-
-  (ensure-lib-from-svn 'rdebug "http://ruby-debug.rubyforge.org/svn/trunk/emacs/")
-  (ensure-lib-from-svn 'ruby-mode "http://svn.ruby-lang.org/repos/ruby/trunk/misc/"))
+    (ensure-lib-from-url 'package "http://bit.ly/pkg-el23")))
 
 
 

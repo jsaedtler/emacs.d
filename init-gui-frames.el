@@ -1,11 +1,12 @@
 ;;----------------------------------------------------------------------------
 ;; Stop C-z from minimizing windows under OS X
 ;;----------------------------------------------------------------------------
-(global-set-key (kbd "C-z")
-                (lambda ()
-                  (interactive)
-                  (unless (and *is-a-mac* window-system)
-                    (suspend-frame))))
+(defun maybe-suspend-frame ()
+  (interactive)
+  (unless (and *is-a-mac* window-system)
+    (suspend-frame)))
+
+(global-set-key (kbd "C-z") 'maybe-suspend-frame)
 
 
 ;;----------------------------------------------------------------------------
@@ -20,18 +21,16 @@
 ;;----------------------------------------------------------------------------
 ;; Show a marker in the left fringe for lines not in the buffer
 ;;----------------------------------------------------------------------------
-(setq default-indicate-empty-lines t)
+(setq indicate-empty-lines t)
 
 
 ;;----------------------------------------------------------------------------
 ;; Window size and features
 ;;----------------------------------------------------------------------------
-(if (fboundp 'tool-bar-mode)
+(when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
-(if (fboundp 'set-scroll-bar-mode)
+(when (fboundp 'set-scroll-bar-mode)
   (set-scroll-bar-mode nil))
-
-(require 'init-maxframe)
 
 (defun adjust-opacity (frame incr)
   (let* ((oldalpha (or (frame-parameter frame 'alpha) 100))
@@ -40,6 +39,13 @@
       (modify-frame-parameters frame (list (cons 'alpha newalpha))))))
 
 (when (fboundp 'ns-toggle-fullscreen)
+  (defadvice ns-toggle-fullscreen (after mark-full-screen activate)
+    (set-frame-parameter nil
+                         'is-full-screen
+                         (not (frame-parameter nil 'is-full-screen))))
+
+
+
   ;; Command-Option-f to toggle fullscreen mode
   (global-set-key (kbd "M-ƒ") 'ns-toggle-fullscreen))
 
@@ -49,14 +55,9 @@
 
 (add-hook 'after-make-frame-functions
           (lambda (frame)
-            (let ((prev-frame (selected-frame)))
-              (select-frame frame)
-              (prog1
-                  (unless window-system
-                    (set-frame-parameter frame 'menu-bar-lines 0))
-                (select-frame prev-frame)))))
-
-
+            (with-selected-frame frame
+              (unless window-system
+                (set-frame-parameter nil 'menu-bar-lines 0)))))
 
 
 (provide 'init-gui-frames)

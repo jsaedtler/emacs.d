@@ -7,12 +7,9 @@
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 (setq goto-address-mail-face 'link)
 
-(autoload 'mwe:log-keyboard-commands "mwe-log-commands"
-  "Log commands executed in the current buffer" t)
-
-(show-paren-mode 1)
-(setq show-paren-style 'parenthesis)
-(setq show-paren-delay 0)
 (column-number-mode 1)
+
+(setq-default regex-tool-backend 'perl)
+
 
 (provide 'init-misc)

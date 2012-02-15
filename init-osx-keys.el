@@ -8,14 +8,11 @@
     ;; Woohoo!!
     (global-set-key (kbd "M-`") 'ns-next-frame)
     (global-set-key (kbd "M-h") 'ns-do-hide-emacs)
-    (eval-after-load "nxml-mode"
+    (eval-after-load 'nxml-mode
       '(define-key nxml-mode-map (kbd "M-h") nil))
     (global-set-key (kbd "M-ˍ") 'ns-do-hide-others) ;; what describe-key reports
     (global-set-key (kbd "M-c") 'ns-copy-including-secondary)
-    (global-set-key (kbd "M-v") 'ns-paste-secondary))
-  ;; Use Apple-w to close current buffer on OS-X (is normally bound to kill-ring-save)
-  (eval-after-load "viper"
-    '(global-set-key [(meta w)] 'kill-this-buffer)))
+    (global-set-key (kbd "M-v") 'ns-paste-secondary)))
 
 
 (provide 'init-osx-keys)
